@@ -13,4 +13,5 @@ fromEvent(sampleButton, 'click')
   .pipe(switchMap(() => interval(1000)))
   .subscribe(i => {
     output.innerHTML = output.innerHTML + i + '\n';
+    output.scrollTop = output.scrollHeight;
   });
