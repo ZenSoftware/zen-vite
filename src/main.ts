@@ -1,17 +1,28 @@
 import './style.css';
-import { fromEvent, switchMap, interval } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 
-const output = document.querySelector<HTMLDivElement>('#output')!;
-const sampleButton = document.querySelector<HTMLButtonElement>('#sample-button')!;
+let sub: Subscription | undefined;
+const output = document.querySelector<HTMLPreElement>('#output')!;
+
+const startButton = document.querySelector<HTMLButtonElement>('#start-button')!;
+startButton.addEventListener('click', () => {
+  if (!sub) {
+    sub = interval(1000).subscribe(i => {
+      output.innerHTML = output.innerHTML + i + '\n';
+      output.scrollTop = output.scrollHeight;
+    });
+  }
+});
+
+const stopButton = document.querySelector<HTMLButtonElement>('#stop-button')!;
+stopButton.addEventListener('click', () => {
+  if (sub) {
+    sub.unsubscribe();
+    sub = undefined;
+  }
+});
+
 const clearButton = document.querySelector<HTMLButtonElement>('#clear-button')!;
-
 clearButton.addEventListener('click', () => {
   output.innerHTML = '';
 });
-
-fromEvent(sampleButton, 'click')
-  .pipe(switchMap(() => interval(1000)))
-  .subscribe(i => {
-    output.innerHTML = output.innerHTML + i + '\n';
-    output.scrollTop = output.scrollHeight;
-  });
