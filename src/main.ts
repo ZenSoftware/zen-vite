@@ -5,7 +5,9 @@ const output = document.querySelector<HTMLDivElement>('#output')!;
 const sampleButton = document.querySelector<HTMLButtonElement>('#sample-button')!;
 const clearButton = document.querySelector<HTMLButtonElement>('#clear-button')!;
 
-clearButton.addEventListener('click', () => (output.innerHTML = ''));
+clearButton.addEventListener('click', () => {
+  output.innerHTML = '';
+});
 
 fromEvent(sampleButton, 'click')
   .pipe(switchMap(() => interval(1000)))
