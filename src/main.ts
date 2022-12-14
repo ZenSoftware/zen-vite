@@ -1,13 +1,14 @@
 import './style.css';
-import { fromEvent, from, map } from 'rxjs';
+import { fromEvent, switchMap, interval } from 'rxjs';
 
 const sampleButton = document.querySelector<HTMLButtonElement>('#sample-button')!;
 const output = document.querySelector<HTMLDivElement>('#output')!;
 
-fromEvent(sampleButton, 'click').subscribe(() => {
-  from([1, 2, 3, 4])
-    .pipe(map(x => x * 2))
-    .subscribe(val => {
-      output.innerHTML = output.innerHTML + val + '\n';
-    });
-});
+const clearButton = document.querySelector<HTMLButtonElement>('#clear-button')!;
+clearButton.addEventListener('click', () => (output.innerHTML = ''));
+
+fromEvent(sampleButton, 'click')
+  .pipe(switchMap(() => interval(1000)))
+  .subscribe(i => {
+    output.innerHTML = output.innerHTML + i + '\n';
+  });
