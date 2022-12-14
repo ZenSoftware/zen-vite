@@ -1,13 +1,13 @@
-import "./style.css";
+import './style.css';
+import { from, map } from 'rxjs';
 
-export function setupCounter(element: HTMLButtonElement) {
-  let counter = 0;
-  const setCounter = (count: number) => {
-    counter = count;
-    element.innerHTML = `count is ${counter}`;
-  };
-  element.addEventListener("click", () => setCounter(counter + 1));
-  setCounter(0);
-}
+const sampleButton = document.querySelector<HTMLButtonElement>('#sample-button')!;
+const output = document.querySelector<HTMLDivElement>('#output')!;
 
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+sampleButton.addEventListener('click', () => {
+  from([1, 2, 3, 4])
+    .pipe(map(x => x * 2))
+    .subscribe(val => {
+      output.innerHTML = output.innerHTML + val + '\n';
+    });
+});
